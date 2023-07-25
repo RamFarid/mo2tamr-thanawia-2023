@@ -13,11 +13,12 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useScore } from '../../../Contexts/ScoreContext'
 import { SERVER_URL, useUser } from '../../../Contexts/UserContext'
 import generateQRImg from '../../../utils/generateQRImg'
+import html2canvas from 'html2canvas'
 
 function ControlPersonModal({ person, open, onClose }) {
   const { addNewPerson, updatePerson } = useScore()
@@ -33,6 +34,24 @@ function ControlPersonModal({ person, open, onClose }) {
   })
   const [remoteUserName, setRemoteUserName] = useState('')
   const [qrCode, setQrCode] = useState('')
+  const [downloadURL, setDownloadURL] = useState('')
+  const qrCodeImageRef = useRef(null)
+
+  const handleScreenshot = () => {
+    const divToCapture = qrCodeImageRef.current
+
+    // Use html2canvas to take the screenshot
+    html2canvas(divToCapture)
+      .then(function (canvas) {
+        // Convert the canvas to an image URL
+        const screenshotUrl = canvas.toDataURL('image/png')
+        console.log(canvas)
+
+        setDownloadURL(screenshotUrl)
+        setIsLoading(false)
+      })
+      .catch(console.log)
+  }
 
   useEffect(() => {
     if (Object.keys(person).length) {
@@ -74,8 +93,10 @@ function ControlPersonModal({ person, open, onClose }) {
           console.log(link)
           setRemoteUserName(data.data.name)
           setQrCode(link)
+          setTimeout(handleScreenshot, 700)
           return
         }
+        setIsLoading(false)
         toast.error(data.message)
         return
       }
@@ -97,14 +118,15 @@ function ControlPersonModal({ person, open, onClose }) {
         console.log(data.data)
         updatePerson(data.data)
         closeHandler()
+        setIsLoading(false)
         return
       }
+      setIsLoading(false)
       toast.error(data.message)
       return
     } catch (error) {
       toast.error(error.message)
       console.error(error)
-    } finally {
       setIsLoading(false)
     }
   }
@@ -114,6 +136,7 @@ function ControlPersonModal({ person, open, onClose }) {
     setName('')
     setPoints('')
     setQrCode('')
+    setDownloadURL('')
     onClose()
   }
 
@@ -142,15 +165,30 @@ function ControlPersonModal({ person, open, onClose }) {
             flexBasis: qrCode.length > 0 ? '100%' : '0',
           }}
         >
-          <Box
-            component={'img'}
-            src={qrCode}
-            alt='Photo of user'
-            maxWidth={'300px'}
-            maxHeight={'300px'}
-            overflow={'hidden'}
-            mx={'auto'}
-          />
+          <Stack ref={qrCodeImageRef}>
+            <Box
+              component={'img'}
+              src={qrCode}
+              alt='Photo of user'
+              maxWidth={'300px'}
+              maxHeight={'300px'}
+              overflow={'hidden'}
+              mx={'auto'}
+            />
+            <Typography align='center' variant='h5'>
+              {remoteUserName}
+            </Typography>
+          </Stack>
+          <Button
+            disabled={isLoading}
+            sx={{ mt: 3 }}
+            component={'a'}
+            href={downloadURL}
+            variant='contained'
+            download={`${remoteUserName}-qrcode.png`}
+          >
+            {isLoading ? 'بحمل الqrcode' : 'نزل الصورة'}
+          </Button>
         </Stack>
         <Stack
           overflow='hidden'
