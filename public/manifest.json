@@ -1,0 +1,47 @@
+{
+  "short_name": "بين السما و الأرض",
+  "name": "بين السما و الأرض",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/maskable_icon192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "اعرف ترتيبك",
+      "short_name": "اعرف ترتيبك",
+      "description": "اعرف ترتيبك في المؤتمر أو اعرف ترتيب مجموعتك",
+      "url": "/score",
+      "icons": [{ "src": "/android-chrome-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "شعار المؤتمر",
+      "short_name": "الشعار",
+      "description": "أحفظ شعار المؤتمر هتاخد بونص",
+      "url": "/motto",
+      "icons": [{ "src": "/android-chrome-192x192.png", "sizes": "192x192" }]
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#673ab7",
+  "background_color": "#673ab7"
+}
