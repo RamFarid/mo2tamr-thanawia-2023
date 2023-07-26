@@ -28,7 +28,7 @@ function AppInstallInstructions() {
         <Box component='li'>خليك فاتح كروم لحد ما يتحمل خالص</Box>
       </Box>
       <Typography fontWeight={700} mt={2.4}>
-        أيفون 💩
+        أيفون:
       </Typography>
       <Box component={'ul'} px={2}>
         <Box component='li' position='relative'>

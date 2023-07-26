@@ -81,7 +81,16 @@ function SpeedDial() {
       <Backdrop open={open} />
       <MuiSpeedDial
         ariaLabel='SpeedDial tooltip example'
-        sx={{ position: 'fixed', bottom: 16, right: 16 }}
+        sx={{
+          position: 'fixed',
+          bottom: 16,
+          right: 16,
+        }}
+        FabProps={{
+          sx: {
+            backgroundColor: open ? 'primary' : '#673ab76b',
+          },
+        }}
         icon={<SpeedDialIcon />}
         onClose={handleClose}
         onOpen={handleOpen}
