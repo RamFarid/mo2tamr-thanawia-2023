@@ -5,6 +5,7 @@ import AppContents from '../components/Home/AppContents'
 import { Divider } from '@mui/material'
 import AppNotes from '../components/Home/AppNotes'
 import AppInstallInstructions from '../components/Home/AppInstallInstructions'
+import AppUpdates from '../components/Home/AppUpdates'
 
 function Home() {
   return (
@@ -16,6 +17,8 @@ function Home() {
       <AppUsage />
       <Divider />
       <AppInstallInstructions />
+      <Divider />
+      <AppUpdates />
       <Divider />
       <AppNotes />
     </Stack>

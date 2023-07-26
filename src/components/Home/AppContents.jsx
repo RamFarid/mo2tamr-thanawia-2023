@@ -16,8 +16,7 @@ function AppContents() {
       <Paragraph>
         خش <CustomLink to={'/motto'}>أحفظ الشعار</CustomLink> <br /> ممكن تخش
         تشوف <CustomLink to='/score'>السكور بتاعك أو بتاع مجموعتك</CustomLink>{' '}
-        <br /> شوف هتعمل ايه <CustomLink to={'/'}>بعد ساعة مثلا</CustomLink> او{' '}
-        <CustomLink to={'/'}>شوف الغدا أمتى</CustomLink> <br />
+        <br /> شوف هتعمل ايه بعد ساعة مثلا او شوف الغدا أمتى <br />
       </Paragraph>
     </Box>
   )
