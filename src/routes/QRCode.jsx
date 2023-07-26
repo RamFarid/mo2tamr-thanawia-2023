@@ -43,7 +43,7 @@ function QRCode() {
           const data = await res.json()
           if (data.success) {
             setMessage(
-              `<b>${data.data.name} </b>زاد 5 نقط و وصل لـ<span style="color: green;font-weight: 900;">${data.data.points}</span> نقطه`
+              `<b>${data.data.name} </b>زاد نقطتين و وصل لـ<span style="color: green;font-weight: 900;">${data.data.points}</span> نقطه`
             )
           }
           if (!data.success) {

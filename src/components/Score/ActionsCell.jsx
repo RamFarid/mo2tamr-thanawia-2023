@@ -26,7 +26,6 @@ function ActionsCell({ onDelete, onEdit, isLoading, onHold }) {
       onCancel: (e) => {
         e.preventDefault()
         setIsLongPress(false)
-        console.log('Finished...')
       },
     }
   )

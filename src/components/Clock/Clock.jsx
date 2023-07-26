@@ -14,8 +14,6 @@ function Clock({ activities, areas, hands, morining }) {
     const centerX = canvas.width / 2
     const centerY = canvas.height / 2
     const radius = 120
-    console.log('hands: ', hands)
-    console.log('areas: ', areas)
     drawOccupiedAreas(ctx, areas, centerX, centerY, radius, morining)
     return () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)

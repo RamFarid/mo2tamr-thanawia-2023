@@ -33,7 +33,6 @@ function Login() {
       })
       const data = await response.json()
       if (!data.success) return setError(data.message)
-      console.log('Success')
       toast.success(data.message)
       localStorage.setItem('password', data.data)
       setIsLoggedIn(true)

@@ -53,9 +53,7 @@ function ScoreContextProvider({ children }) {
 
   const updatePerson = (person) => {
     const removePerson = persons.filter((p) => p._id !== person._id)
-    console.log('removePerson: ', removePerson)
     const updatedPerson = sortDesc([...removePerson, person])
-    console.log('updatedPerson: ', updatedPerson)
     setPersons(updatedPerson)
   }
 

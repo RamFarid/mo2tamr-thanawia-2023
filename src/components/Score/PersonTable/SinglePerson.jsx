@@ -46,7 +46,6 @@ function SinglePerson({ person, onEdit, i }) {
       })
       updatePerson(data.data)
     }
-    console.log('Long Press')
   }, [person, updatePerson])
 
   // #E6E6FA

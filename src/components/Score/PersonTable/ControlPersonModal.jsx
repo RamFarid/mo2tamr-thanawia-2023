@@ -45,7 +45,6 @@ function ControlPersonModal({ person, open, onClose }) {
       .then(function (canvas) {
         // Convert the canvas to an image URL
         const screenshotUrl = canvas.toDataURL('image/png')
-        console.log(canvas)
 
         setDownloadURL(screenshotUrl)
         setIsLoading(false)
@@ -90,7 +89,6 @@ function ControlPersonModal({ person, open, onClose }) {
           toast.success(data.message)
           addNewPerson(data.data)
           const link = await generateQRImg(data.data._id)
-          console.log(link)
           setRemoteUserName(data.data.name)
           setQrCode(link)
           setTimeout(handleScreenshot, 700)
@@ -115,8 +113,8 @@ function ControlPersonModal({ person, open, onClose }) {
       const data = await response.json()
       if (data.success) {
         toast.success(data.message)
-        console.log(data.data)
         updatePerson(data.data)
+        console.log(data.data)
         closeHandler()
         setIsLoading(false)
         return

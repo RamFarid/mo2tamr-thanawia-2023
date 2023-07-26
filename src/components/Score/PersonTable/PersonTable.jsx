@@ -8,11 +8,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from '@mui/material'
 import TableHeader from '../TableHeader'
 import SinglePerson from './SinglePerson'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState, useTransition } from 'react'
 import ControlPersonModal from './ControlPersonModal'
 import { useScore } from '../../../Contexts/ScoreContext'
 import CustomCell from '../../reusable/CustomGroupCell'
@@ -20,9 +21,12 @@ import { useUser } from '../../../Contexts/UserContext'
 
 function PersonTable() {
   const { persons, isLoading, personError } = useScore()
+  const [finalPersons, setfinalPersons] = useState(persons || [])
   const [showEditModal, setShowEditModal] = useState(false)
   const [editContent, setEditContent] = useState({})
   const { isLoggedIn } = useUser()
+  const [searchName, setSearchName] = useState('')
+  const [isPending, startTransition] = useTransition()
   const editHandler = useCallback((person) => {
     setShowEditModal(true)
     setEditContent(person)
@@ -31,6 +35,11 @@ function PersonTable() {
     setShowEditModal(false)
     setEditContent({})
   }, [])
+
+  useEffect(() => {
+    setfinalPersons(persons)
+  }, [persons])
+
   return (
     <>
       <TableContainer component={Paper}>
@@ -55,7 +64,7 @@ function PersonTable() {
                     </Link>
                     <br />
                     {`${
-                      persons.length > 0
+                      finalPersons.length > 0
                         ? 'المجاميع اللي قدامك دي قديمه لحد ما المجامبع الحديثه اوصلها'
                         : ''
                     }`}
@@ -72,6 +81,50 @@ function PersonTable() {
               actoionText={'ضيف مخدوم'}
               txt='اعـــــــرف تــرتـــيـــبـــك'
             />
+            <TableRow>
+              <TableCell
+                colSpan={isLoggedIn ? 5 : 4}
+                align='right'
+                sx={{ py: 1 }}
+              >
+                <TextField
+                  size='small'
+                  disabled={isLoading}
+                  placeholder='ابحث عن مخدوم'
+                  fullWidth
+                  value={searchName}
+                  sx={{
+                    '& svg': {
+                      width: '100%',
+                      height: '100%',
+                    },
+                  }}
+                  InputProps={{
+                    sx: {
+                      pl: 1.4,
+                    },
+                    endAdornment: isPending ? (
+                      <CircularProgress size={26} />
+                    ) : null,
+                  }}
+                  onChange={(e) => {
+                    setSearchName(e.target.value)
+                    if (e.target.value) {
+                      startTransition(() => {
+                        const newOne = persons.filter((person) =>
+                          person.name.includes(e.target.value)
+                        )
+                        setfinalPersons(newOne)
+                      })
+                    } else {
+                      startTransition(() => {
+                        setfinalPersons(persons)
+                      })
+                    }
+                  }}
+                />
+              </TableCell>
+            </TableRow>
             <TableRow>
               <TableCell align='right' sx={{ py: 1 }}>
                 ت
@@ -98,7 +151,7 @@ function PersonTable() {
                 </CustomCell>
               </TableRow>
             ) : persons.length ? (
-              persons.map((person, i) => (
+              finalPersons.map((person, i) => (
                 <SinglePerson
                   person={person}
                   key={person._id}

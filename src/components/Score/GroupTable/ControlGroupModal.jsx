@@ -72,11 +72,9 @@ function ControlGroupModal({ group, open, onClose }) {
       if (data.success) {
         toast.success(data.message)
         updateGroup(data.data)
-        console.log(data.data)
         return
       }
       toast.error(data.message)
-      console.log('Edit Group')
       return
     } catch (error) {
       toast.error(error.message)

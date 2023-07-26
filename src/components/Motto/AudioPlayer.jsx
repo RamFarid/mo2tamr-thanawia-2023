@@ -17,7 +17,6 @@ function AudioPlayer() {
     motto.load()
     motto.preload = true
     const loadeddataHandler = () => {
-      console.log('Load')
       setDuration(motto.duration)
     }
     const playHandler = () => {
@@ -28,7 +27,6 @@ function AudioPlayer() {
       setPlayer(false)
     }
     const timeUpdateHandler = () => {
-      console.log(motto.currentTime)
       setCurrentDuration(motto.currentTime)
     }
     motto.addEventListener('loadeddata', loadeddataHandler)

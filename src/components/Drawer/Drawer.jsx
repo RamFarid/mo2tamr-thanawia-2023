@@ -32,11 +32,13 @@ import MenuAccordionDetails from './MenuAccordionDetails'
 import MenuItem from './MenuItem'
 import MenuAccorion from './MenuAccorion'
 import hymns from '../../data/hymns'
+import { toast } from 'react-toastify'
 
 function Drawer({ isDrawer, closeDrawer }) {
   const [isMenu, setIsMenu] = useState(null)
   const { isLoggedIn, logOut } = useUser()
   const [theme, toggleTheme] = useTheme()
+  const [isLoading, setisLoading] = useState(false)
 
   const closeIsMenu = useCallback(() => {
     setIsMenu(null)
@@ -162,14 +164,23 @@ function Drawer({ isDrawer, closeDrawer }) {
         </Stack>
         <Stack justifyContent={'flex-end'} direction={'row'} my={1} px={2.5}>
           <Button
-            disabled={!isLoggedIn}
+            disabled={!isLoggedIn || isLoading}
             variant='contained'
             color='error'
             disableElevation
             sx={{ borderRadius: '100px' }}
-            onClick={logOut}
+            onClick={async () => {
+              try {
+                setisLoading(true)
+                await logOut()
+              } catch (error) {
+                toast.error(error.message)
+              } finally {
+                setisLoading(false)
+              }
+            }}
           >
-            سجل خروج
+            {isLoading ? 'يتم تسجيل الخروج...' : 'سجل خروج'}
           </Button>
         </Stack>
 

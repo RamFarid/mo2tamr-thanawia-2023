@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Box, CircularProgress, Modal, Stack } from '@mui/material'
+import { toast } from 'react-toastify'
 
 export const SERVER_URL =
   process.env.NODE_ENV === 'production'
@@ -23,7 +24,6 @@ function UserContextProvider({ children }) {
           credentials: 'include',
         })
         const data = await response.json()
-        console.log(data)
         if (data.success) {
           setIsLoggedIn(true)
           return
@@ -55,9 +55,20 @@ function UserContextProvider({ children }) {
     }
   }, [])
 
-  function logOut() {
-    localStorage.removeItem('password')
-    setIsLoggedIn(false)
+  async function logOut() {
+    try {
+      const res = await fetch(`${SERVER_URL}/auth/logout`, {
+        credentials: 'include',
+      })
+      const data = await res.json()
+      if (data.success) {
+        setIsLoggedIn(false)
+        return
+      }
+      toast.error(data.message, { progress: 0 })
+    } catch (error) {
+      toast.error('أسف في حاحه حصلت: ' + error.message)
+    }
   }
 
   return (
