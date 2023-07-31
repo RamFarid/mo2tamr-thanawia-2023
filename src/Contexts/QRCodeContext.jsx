@@ -15,10 +15,10 @@ function QRCodeContextProvider({ children }) {
   const location = useLocation()
 
   useEffect(() => {
-    if (scannerRef.current && scannerRef.current?.getState() === 2) {
-      console.log('Should pause')
-      scannerRef.current.clear()
+    if (scannerRef.current) {
       scannerRef.current = null
+      console.log('Should pause')
+      if(scannerRef.current?.getState() === 2) scannerRef.current.clear()
     }
   }, [location.pathname])
 
