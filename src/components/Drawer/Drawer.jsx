@@ -4,6 +4,7 @@ import HomeSharpIcon from '@mui/icons-material/HomeSharp'
 import EventNoteIcon from '@mui/icons-material/EventNote'
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic'
 import AccessAlarm from '@mui/icons-material/AccessAlarm'
+import QrCode2RoundedIcon from '@mui/icons-material/QrCode2Rounded'
 import {
   Box,
   ButtonGroup,
@@ -149,6 +150,14 @@ function Drawer({ isDrawer, closeDrawer }) {
             </ListItemIcon>
             <ListItemText>الترتيب</ListItemText>
           </MenuLink>
+          {isLoggedIn ? (
+            <MenuLink component={NavLink} to='/qrcode' onClick={closeDrawer}>
+              <ListItemIcon>
+                <QrCode2RoundedIcon />
+              </ListItemIcon>
+              <ListItemText>Scanner</ListItemText>
+            </MenuLink>
+          ) : null}
           <Divider />
         </Box>
         <Stack direction={'row'} justifyContent={'space-between'} px={3}>
@@ -273,7 +282,7 @@ const SocialLink = ({ children, href }) => (
 const MenuLink = styled(MuiMenuItem)(({ theme }) => {
   return {
     borderRadius: '0 100px 100px 0',
-    my: 1,
+    marginTop: 8,
     fontWeight: 700,
     bgcolor: 'background',
     '&.active': {
