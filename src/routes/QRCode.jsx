@@ -68,7 +68,6 @@ function QRCode() {
       scannerRef.current = new Html5QrcodeScanner(
         'reader',
         {
-          videoConstraints: { facingMode: 'rare' },
           fps: 60,
           qrbox: { width: 250, height: 250 },
         },
