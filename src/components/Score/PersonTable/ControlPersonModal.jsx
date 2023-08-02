@@ -221,15 +221,16 @@ function ControlPersonModal({ person, open, onClose }) {
               disabled
               type='number'
               label='النقط'
-              sx={{ flex: 1 }}
+              sx={{ flex: 4 }}
             />
             <TextField
               value={points}
               error={Boolean(errors.points.length)}
               helperText={Boolean(errors.points.length) ? errors.points : ''}
-              label='تعديل النقط'
+              label='تعديل بـ'
               type='number'
               size='small'
+              sx={{ flex: 2 }}
               onChange={(e) => {
                 setErrors((pre) => ({ ...pre, points: '' }))
                 setPoints(e.target.value)
