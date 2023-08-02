@@ -21,7 +21,6 @@ import { useTheme } from './Contexts/ThemeContext'
 import Hymn from './routes/Hymn'
 import QRCode from './routes/QRCode'
 import ErrorBoundary from './components/ErrorBoundary'
-import QRCodeContextProvider from './Contexts/QRCodeContext'
 
 function App() {
   const [theme] = useTheme()
@@ -65,90 +64,88 @@ function App() {
       <ThemeProvider theme={themeConstructor}>
         <UserContextProvider>
           <ScoreContextProvider>
-            <QRCodeContextProvider>
-              <GlobalStyles
-                styles={{
-                  '*': {
-                    padding: 0,
-                    margin: 0,
-                    boxSizing: 'border-box',
-                    fontFamily: "'Cairo', sans-serif",
-                  },
-                  body: {
-                    fontFamily: "'Cairo', sans-serif",
-                  },
-                  '.MuiFormHelperText-root': {
-                    textAlign: 'right !important',
-                  },
-                }}
-              />
-              <CssBaseline />
-              <Routes>
-                <Route element={<HomeLayout />} path='/'>
-                  <Route
-                    element={
-                      <ErrorBoundary>
-                        <Home />
-                      </ErrorBoundary>
-                    }
-                    index
-                  />
-                  <Route
-                    element={
-                      <ErrorBoundary>
-                        <Score />
-                      </ErrorBoundary>
-                    }
-                    path='/score'
-                  />
-                  <Route
-                    element={
-                      <ErrorBoundary>
-                        <Motto />
-                      </ErrorBoundary>
-                    }
-                    path='/motto'
-                  />
-                  <Route
-                    element={
-                      <ErrorBoundary>
-                        <Day />
-                      </ErrorBoundary>
-                    }
-                    path='/day/:day'
-                  />
-                  <Route
-                    element={
-                      <ErrorBoundary>
-                        <Hymn />
-                      </ErrorBoundary>
-                    }
-                    path='/hymn/:hymn'
-                  />
-                  <Route
-                    element={
-                      <ErrorBoundary>
-                        <QRCode />
-                      </ErrorBoundary>
-                    }
-                    path='/qrcode'
-                  />
-                </Route>
-                <Route element={<Login />} path='/login' />
-              </Routes>
-              <ToastContainer
-                position='top-center'
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={true}
-                closeOnClick
-                rtl={true}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme='light'
-              />
-            </QRCodeContextProvider>
+            <GlobalStyles
+              styles={{
+                '*': {
+                  padding: 0,
+                  margin: 0,
+                  boxSizing: 'border-box',
+                  fontFamily: "'Cairo', sans-serif",
+                },
+                body: {
+                  fontFamily: "'Cairo', sans-serif",
+                },
+                '.MuiFormHelperText-root': {
+                  textAlign: 'right !important',
+                },
+              }}
+            />
+            <CssBaseline />
+            <Routes>
+              <Route element={<HomeLayout />} path='/'>
+                <Route
+                  element={
+                    <ErrorBoundary>
+                      <Home />
+                    </ErrorBoundary>
+                  }
+                  index
+                />
+                <Route
+                  element={
+                    <ErrorBoundary>
+                      <Score />
+                    </ErrorBoundary>
+                  }
+                  path='/score'
+                />
+                <Route
+                  element={
+                    <ErrorBoundary>
+                      <Motto />
+                    </ErrorBoundary>
+                  }
+                  path='/motto'
+                />
+                <Route
+                  element={
+                    <ErrorBoundary>
+                      <Day />
+                    </ErrorBoundary>
+                  }
+                  path='/day/:day'
+                />
+                <Route
+                  element={
+                    <ErrorBoundary>
+                      <Hymn />
+                    </ErrorBoundary>
+                  }
+                  path='/hymn/:hymn'
+                />
+                <Route
+                  element={
+                    <ErrorBoundary>
+                      <QRCode />
+                    </ErrorBoundary>
+                  }
+                  path='/qrcode'
+                />
+              </Route>
+              <Route element={<Login />} path='/login' />
+            </Routes>
+            <ToastContainer
+              position='top-center'
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={true}
+              closeOnClick
+              rtl={true}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme='light'
+            />
           </ScoreContextProvider>
         </UserContextProvider>
       </ThemeProvider>

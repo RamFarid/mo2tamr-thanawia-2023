@@ -9,12 +9,10 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { SERVER_URL } from '../Contexts/UserContext'
-import { useEffect } from 'react'
-import { Html5QrcodeScanner } from 'html5-qrcode'
 import { useNavigate } from 'react-router-dom'
-import { useQRCode } from '../Contexts/QRCodeContext'
+import { Html5QrcodeScanner } from 'html5-qrcode'
 
 function QRCode() {
   const navigate = useNavigate()
@@ -23,14 +21,45 @@ function QRCode() {
   const [error, setError] = useState(false)
   const [statusCode, setStatusCode] = useState(0)
   const [message, setMessage] = useState('')
-  const scannerRef = useQRCode(null)
+  const scannerRef = useRef(null)
+
+  useEffect(() => {
+    if (!scannerRef.current) {
+      scannerRef.current = new Html5QrcodeScanner(
+        'reader',
+        {
+          fps: 60,
+          qrbox: { width: 250, height: 250 },
+        },
+        /* verbose= */ false
+      )
+      scannerRef.current?.render(
+        async (decodedText) => {
+          // handle the scanned code as you like, for example:
+          setId(decodedText)
+          scoreUp(decodedText)
+          if (scannerRef.current.getState() === 2)
+            scannerRef.current.pause(true)
+        },
+        (error) => {
+          // handle scan failure, usually better to ignore and keep scanning.
+          // for example:
+          console.log(error)
+        }
+      )
+    }
+    return () => {
+      scannerRef.current.clear()
+    }
+  }, [scannerRef])
+
   const retryAgain = () => {
     setId('')
     setIsLoading(true)
     setMessage('')
     setStatusCode(0)
     setError(false)
-    if (scannerRef.current.getState() === 3) scannerRef.current.resume()
+    if (scannerRef.current.getState() === 3) scannerRef.current.resume(true)
   }
   const scoreUp = async (decodedId) => {
     if (!decodedId) {
@@ -62,35 +91,6 @@ function QRCode() {
       setIsLoading(false)
     }
   }
-
-  useEffect(() => {
-    if (!id && !scannerRef.current) {
-      scannerRef.current = new Html5QrcodeScanner(
-        'reader',
-        {
-          fps: 60,
-          qrbox: { width: 250, height: 250 },
-        },
-        /* verbose= */ false
-      )
-      scannerRef.current.render(onScanSuccess, onScanFailure)
-      async function onScanSuccess(decodedText, decodedResult) {
-        // handle the scanned code as you like, for example:
-        setId(decodedText)
-        scoreUp(decodedText)
-        if (scannerRef.current.getState() === 2) scannerRef.current.pause(true)
-      }
-      function onScanFailure(error) {
-        // handle scan failure, usually better to ignore and keep scanning.
-        // for example:
-      }
-    }
-    return () => {
-      if (!id && !scannerRef.current) {
-        scannerRef.current.clear()
-      }
-    }
-  }, [id, scannerRef])
 
   return (
     <>

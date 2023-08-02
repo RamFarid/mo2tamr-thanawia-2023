@@ -56,7 +56,6 @@ function ControlPersonModal({ person, open, onClose }) {
     if (Object.keys(person).length) {
       setName(person.name)
       setGrade(person.grade)
-      setPoints(person.points)
     }
   }, [person])
 
@@ -64,7 +63,7 @@ function ControlPersonModal({ person, open, onClose }) {
     if (!online) return toast('طب ما انت معكش نت')
     const upoints = Number(points)
     const uname = name.trim()
-    if (!upoints && upoints !== 0) {
+    if (!upoints && upoints === 0) {
       setErrors((pre) => ({ ...pre, points: 'دخل الرقم' }))
       return
     }
@@ -105,7 +104,7 @@ function ControlPersonModal({ person, open, onClose }) {
         },
         body: JSON.stringify({
           name: uname,
-          points: upoints === '' ? 0 : upoints,
+          points: person.points + upoints,
           grade,
         }),
         credentials: 'include',
@@ -215,26 +214,28 @@ function ControlPersonModal({ person, open, onClose }) {
             label='الأسم'
             type='text'
           />
-          <TextField
-            value={points}
-            margin='dense'
-            sx={{ my: 2 }}
-            size='small'
-            fullWidth
-            type='number'
-            error={Boolean(errors.points.length)}
-            helperText={Boolean(errors.points.length) ? errors.points : ''}
-            onChange={(e) => {
-              setErrors((pre) => ({ ...pre, points: '' }))
-              const { value } = e.target
-              if (value < 0) {
-                setErrors((pre) => ({ ...pre, points: 'سالب ازاي يعني؟' }))
+          <Stack direction={'row'} my={2} gap={2}>
+            <TextField
+              defaultValue={person.points}
+              size='small'
+              disabled
+              type='number'
+              label='النقط'
+              sx={{ flex: 1 }}
+            />
+            <TextField
+              value={points}
+              error={Boolean(errors.points.length)}
+              helperText={Boolean(errors.points.length) ? errors.points : ''}
+              label='تعديل النقط'
+              type='number'
+              size='small'
+              onChange={(e) => {
+                setErrors((pre) => ({ ...pre, points: '' }))
                 setPoints(e.target.value)
-              }
-              setPoints(e.target.value)
-            }}
-            label='النقط'
-          />
+              }}
+            />
+          </Stack>
           <FormControl fullWidth>
             <InputLabel id='grade-menu-label'>المرحله</InputLabel>
             <Select
@@ -269,7 +270,7 @@ function ControlPersonModal({ person, open, onClose }) {
               !points ||
               !grade ||
               (name.trim() === person.name &&
-                Number(points) === Number(person.points) &&
+                !Number(points) &&
                 Number(grade) === Number(person.grade))
             }
           >
