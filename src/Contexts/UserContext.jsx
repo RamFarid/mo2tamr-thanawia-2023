@@ -4,7 +4,7 @@ import { Box, CircularProgress, Modal, Stack } from '@mui/material'
 import { toast } from 'react-toastify'
 
 export const SERVER_URL =
-  process.env.NODE_ENV === 'development'
+  process.env.NODE_ENV === 'production'
     ? `https://mo2tamr-thanawia-server-2023.vercel.app`
     : `http://localhost:5000`
 
