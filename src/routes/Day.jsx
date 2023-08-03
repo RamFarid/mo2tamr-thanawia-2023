@@ -1,11 +1,37 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import Clock from '../components/Clock/Clock'
 import { thursdayClock, fridayClock, saturdayClock } from '../data/clock'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded'
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded'
+import { useSwipeable } from 'react-swipeable'
 function Day() {
   const { day } = useParams()
+  const navigate = useNavigate()
+  const swipes = useSwipeable({
+    onSwipedLeft: () => {
+      navigate(
+        day === 'الخميس'
+          ? ''
+          : day === 'الجمعه'
+          ? '/day/الخميس'
+          : day === 'السبت'
+          ? '/day/الجمعه'
+          : '/day/الخميس'
+      )
+    },
+    onSwipedRight: () => {
+      navigate(
+        day === 'السبت'
+          ? ''
+          : day === 'الجمعه'
+          ? '/day/السبت'
+          : day === 'الخميس'
+          ? '/day/الجمعه'
+          : '/day/الخميس'
+      )
+    },
+  })
   const { nightActs, dayActs, nigthHands, dayHands, dayAreas, nightAreas } =
     day === 'الخميس'
       ? thursdayClock
@@ -16,7 +42,7 @@ function Day() {
       : thursdayClock
 
   return (
-    <Box mb={5}>
+    <Box mb={5} {...swipes}>
       <Stack
         mb={2}
         direction='row'

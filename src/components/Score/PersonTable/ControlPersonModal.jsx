@@ -221,13 +221,16 @@ function ControlPersonModal({ person, open, onClose }) {
               disabled
               type='number'
               label='النقط'
-              sx={{ flex: 4 }}
+              sx={{
+                flex: 4,
+                display: Object.keys(person).length ? 'inline-flex' : 'none',
+              }}
             />
             <TextField
               value={points}
               error={Boolean(errors.points.length)}
               helperText={Boolean(errors.points.length) ? errors.points : ''}
-              label='تعديل بـ'
+              label={person?.points ? 'تعديل بـ' : 'النقط'}
               type='number'
               size='small'
               sx={{ flex: 2 }}

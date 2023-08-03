@@ -1,12 +1,30 @@
-import { Button, Stack, Typography } from '@mui/material'
-import { Link, useParams } from 'react-router-dom'
+import { Box, Button, Stack, Typography } from '@mui/material'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded'
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded'
 import hymns from '../data/hymns'
+import { useSwipeable } from 'react-swipeable'
 
 function Hymn() {
+  const navigate = useNavigate()
   const { hymn } = useParams()
-
+  const swipes = useSwipeable({
+    onSwipedRight: (e) => {
+      navigate(
+        targetIndex !== hymns.length - 1 &&
+          (targetHymn
+            ? `/hymn/${hymns[targetIndex + 1]?.slug}`
+            : `/hymn/${hymns[0].slug}`)
+      )
+    },
+    onSwipedLeft: (e) => {
+      navigate(
+        targetIndex !== 0 && targetHymn
+          ? `/hymn/${hymns[targetIndex - 1]?.slug}`
+          : `/hymn/${hymns[0].slug}`
+      )
+    },
+  })
   const getTargetHymn = () => {
     const targetHymn = hymns.find((h) => h.slug === hymn)
     if (targetHymn) {
@@ -22,7 +40,7 @@ function Hymn() {
   })()
 
   return (
-    <>
+    <Box {...swipes} minHeight={'85vh'}>
       <Stack
         mb={2}
         direction='row'
@@ -99,7 +117,7 @@ function Hymn() {
           </Typography>
         </Typography>
       )}
-    </>
+    </Box>
   )
 }
 

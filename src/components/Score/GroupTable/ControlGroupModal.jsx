@@ -4,6 +4,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material'
@@ -22,7 +23,6 @@ function ControlGroupModal({ group, open, onClose }) {
   useEffect(() => {
     if (Object.keys(group).length) {
       setName(group.name)
-      setPoints(group.points)
     }
   }, [group])
 
@@ -44,7 +44,7 @@ function ControlGroupModal({ group, open, onClose }) {
           },
           body: JSON.stringify({
             name: uname,
-            points: upoints === '' ? 0 : upoints,
+            points: upoints,
           }),
           credentials: 'include',
         })
@@ -64,7 +64,7 @@ function ControlGroupModal({ group, open, onClose }) {
         },
         body: JSON.stringify({
           name: uname,
-          points: points === '' ? 0 : points,
+          points: upoints + group.points,
         }),
         credentials: 'include',
       })
@@ -125,25 +125,32 @@ function ControlGroupModal({ group, open, onClose }) {
             setName(value)
           }}
         />
-        <TextField
-          value={points}
-          margin='dense'
-          size='small'
-          fullWidth
-          type='number'
-          label='النقط'
-          error={Boolean(errors.points.length)}
-          helperText={Boolean(errors.points.length) ? errors.points : ''}
-          onChange={(e) => {
-            setErrors((pre) => ({ ...pre, points: '' }))
-            const value = e.target.value.trim()
-            if (value < 0) {
-              setErrors((pre) => ({ ...pre, points: 'سالب ازاي يعني؟' }))
-              setPoints(value)
-            }
-            setPoints(value)
-          }}
-        />
+        <Stack direction={'row'} my={2} gap={2}>
+          <TextField
+            defaultValue={group.points}
+            size='small'
+            disabled
+            type='number'
+            label='النقط'
+            sx={{
+              flex: 4,
+              display: Object.keys(group).length ? 'inline-flex' : 'none',
+            }}
+          />
+          <TextField
+            value={points}
+            error={Boolean(errors.points.length)}
+            helperText={Boolean(errors.points.length) ? errors.points : ''}
+            label={group?.points ? 'تعديل بـ' : 'النقط'}
+            type='number'
+            size='small'
+            sx={{ flex: 2 }}
+            onChange={(e) => {
+              setErrors((pre) => ({ ...pre, points: '' }))
+              setPoints(e.target.value.trim())
+            }}
+          />
+        </Stack>
       </DialogContent>
       <DialogActions>
         <Button onClick={closeHandler} color='error'>

@@ -13,8 +13,10 @@ import { useEffect, useRef, useState } from 'react'
 import { SERVER_URL } from '../Contexts/UserContext'
 import { useNavigate } from 'react-router-dom'
 import { Html5QrcodeScanner } from 'html5-qrcode'
+import { useScore } from '../Contexts/ScoreContext'
 
 function QRCode() {
+  const { updatePerson } = useScore()
   const navigate = useNavigate()
   const [id, setId] = useState('')
   const [isLoading, setIsLoading] = useState(true)
@@ -23,6 +25,37 @@ function QRCode() {
   const [message, setMessage] = useState('')
   const scannerRef = useRef(null)
 
+  const scoreUp = async (decodedId) => {
+    if (!decodedId) {
+      setIsLoading(false)
+      setError(true)
+      setMessage('فين الID؟')
+      return
+    }
+    try {
+      const res = await fetch(`${SERVER_URL}/qrcode?id=${decodedId}`, {
+        method: 'PUT',
+        credentials: 'include',
+      })
+      const data = await res.json()
+      setStatusCode(res.status)
+      if (data.success) {
+        setMessage(
+          `<b>${data.data.name} </b>زاد نقطتين و وصل لـ<span style="color: green;font-weight: 900;">${data.data.points}</span> نقطه`
+        )
+        updatePerson(data.data)
+      }
+      if (!data.success) {
+        setError(true)
+        setMessage(data.message)
+      }
+    } catch (error) {
+      setError(true)
+      setMessage(error.message)
+    } finally {
+      setIsLoading(false)
+    }
+  }
   useEffect(() => {
     if (!scannerRef.current) {
       scannerRef.current = new Html5QrcodeScanner(
@@ -51,6 +84,7 @@ function QRCode() {
     return () => {
       scannerRef.current.clear()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scannerRef])
 
   const retryAgain = () => {
@@ -60,36 +94,6 @@ function QRCode() {
     setStatusCode(0)
     setError(false)
     if (scannerRef.current.getState() === 3) scannerRef.current.resume(true)
-  }
-  const scoreUp = async (decodedId) => {
-    if (!decodedId) {
-      setIsLoading(false)
-      setError(true)
-      setMessage('فين الID؟')
-      return
-    }
-    try {
-      const res = await fetch(`${SERVER_URL}/qrcode?id=${decodedId}`, {
-        method: 'PUT',
-        credentials: 'include',
-      })
-      const data = await res.json()
-      setStatusCode(res.status)
-      if (data.success) {
-        setMessage(
-          `<b>${data.data.name} </b>زاد نقطتين و وصل لـ<span style="color: green;font-weight: 900;">${data.data.points}</span> نقطه`
-        )
-      }
-      if (!data.success) {
-        setError(true)
-        setMessage(data.message)
-      }
-    } catch (error) {
-      setError(true)
-      setMessage(error.message)
-    } finally {
-      setIsLoading(false)
-    }
   }
 
   return (
